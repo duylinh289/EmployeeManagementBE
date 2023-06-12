@@ -22,6 +22,8 @@ namespace RepositoryCodeFirstCore.Mapper
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role));
             CreateMap<TaskList, TaskAssignDTO>().ReverseMap();
             CreateMap<EmployeeImportTmp, ImportEmployeeDTO>().ReverseMap();
+            CreateMap<Subject, SubjectDTO>().ReverseMap();
+            //CreateMap<Class, TaskAssignDTO>().ReverseMap();
         }
     }
 }

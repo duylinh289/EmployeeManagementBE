@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using EmployeeManagementBE.DTO.Student;
 using Microsoft.AspNetCore.Authorization;
@@ -53,12 +54,14 @@ namespace RepositoryCodeFirstCore.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         [Route("Create")]
         public async Task<IActionResult> CreateStudent(CreateStudentDTO req)
         {
             try
             {
-                var res = await _studentsRepository.CreateStudent(req);
+                var userid = User.FindFirstValue(ClaimTypes.Name);
+                var res = await _studentsRepository.CreateStudent(req, userid);
                 var resF = new
                 {
                     code = "Success",
@@ -72,12 +75,14 @@ namespace RepositoryCodeFirstCore.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         [Route("Update")]
         public async Task<IActionResult> UpdateStudent(UpdateStudentDTO req)
         {
             try
             {
-                string res = await _studentsRepository.UpdateStudent(req);
+                var userid = User.FindFirstValue(ClaimTypes.Name);
+                string res = await _studentsRepository.UpdateStudent(req, userid);
                 return res == "Success" ? Ok(new
                                             {
                                                 code = "Success",
@@ -94,13 +99,15 @@ namespace RepositoryCodeFirstCore.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpDelete]
+        [HttpPost]
+        [Authorize]
         [Route("Delete")]
         public async Task<IActionResult> DeleteStudent(Guid id)
         {
             try
             {
-                string res = await _studentsRepository.DeleteStudent(id);
+                var userid = User.FindFirstValue(ClaimTypes.Name);
+                string res = await _studentsRepository.DeleteStudent(id, userid);
                 return res == "Success" ? Ok(new
                 {
                     code = "Success",

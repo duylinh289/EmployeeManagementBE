@@ -13,10 +13,11 @@ namespace RepositoryCodeFirstCore.Data
             //                    .HasColumnType("date");
         }
         public DbSet<Student>? Students { get; set; }
+        public DbSet<Subject>? Subjects { get; set; }
+        public DbSet<Class>? Classes { get; set; }
         public DbSet<User>? Users { get; set; }
         public DbSet<Employee>? Employees { get; set; }
         public DbSet<TaskList>? TaskList { get; set; }
         public DbSet<EmployeeImportTmp>? EmployeeImportTmp { get; set; }
-        //public DbSet<AssignToTask>? AssignToTask { get; set; }
     }
 }
