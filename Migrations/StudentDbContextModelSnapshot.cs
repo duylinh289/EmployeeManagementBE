@@ -22,6 +22,64 @@ namespace RepositoryCodeFirstCore.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ClassStudent", b =>
+                {
+                    b.Property<int>("ClassesClassId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StudentsStudentCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ClassesClassId", "StudentsStudentCode");
+
+                    b.HasIndex("StudentsStudentCode");
+
+                    b.ToTable("ClassStudent");
+                });
+
+            modelBuilder.Entity("EmployeeManagementBE.Data.Class", b =>
+                {
+                    b.Property<int>("ClassId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassId"), 1L, 1);
+
+                    b.Property<string>("ClassName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CreateBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClassId");
+
+                    b.ToTable("Classes");
+                });
+
             modelBuilder.Entity("EmployeeManagementBE.Data.Employee", b =>
                 {
                     b.Property<Guid>("EmployeeCode")
@@ -102,6 +160,129 @@ namespace RepositoryCodeFirstCore.Migrations
                     b.ToTable("EmployeeImportTmp");
                 });
 
+            modelBuilder.Entity("EmployeeManagementBE.Data.ScoreCard", b =>
+                {
+                    b.Property<Guid>("StudentCode")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<float?>("AvgScore")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("FinalExam")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("MidtermExam")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("RegularExam")
+                        .HasColumnType("real");
+
+                    b.HasKey("StudentCode", "SubjectId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("ScoreCard", (string)null);
+                });
+
+            modelBuilder.Entity("EmployeeManagementBE.Data.StudentClass", b =>
+                {
+                    b.Property<Guid>("StudentCode")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnOrder(1);
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int")
+                        .HasColumnOrder(2);
+
+                    b.Property<int>("SchoolYear")
+                        .HasColumnType("int");
+
+                    b.HasKey("StudentCode", "ClassId");
+
+                    b.HasIndex("ClassId");
+
+                    b.ToTable("StudentClasses");
+                });
+
+            modelBuilder.Entity("EmployeeManagementBE.Data.Students_RankDTO", b =>
+                {
+                    b.Property<double?>("AvgScore")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ClassName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ranked")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("StudentCode")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StudentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("StudentRank");
+                });
+
+            modelBuilder.Entity("EmployeeManagementBE.Data.Subject", b =>
+                {
+                    b.Property<int>("SubjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SubjectId"), 1L, 1);
+
+                    b.Property<string>("CreateBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubjectName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("SubjectId");
+
+                    b.ToTable("Subjects");
+                });
+
             modelBuilder.Entity("EmployeeManagementBE.Data.TaskList", b =>
                 {
                     b.Property<int>("Id")
@@ -139,15 +320,29 @@ namespace RepositoryCodeFirstCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CreateBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("StudentName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("StudentCode");
 
@@ -181,6 +376,59 @@ namespace RepositoryCodeFirstCore.Migrations
                     b.HasKey("UserName");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("ClassStudent", b =>
+                {
+                    b.HasOne("EmployeeManagementBE.Data.Class", null)
+                        .WithMany()
+                        .HasForeignKey("ClassesClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RepositoryCodeFirstCore.Data.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsStudentCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EmployeeManagementBE.Data.ScoreCard", b =>
+                {
+                    b.HasOne("RepositoryCodeFirstCore.Data.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EmployeeManagementBE.Data.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("EmployeeManagementBE.Data.StudentClass", b =>
+                {
+                    b.HasOne("EmployeeManagementBE.Data.Class", "Class")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RepositoryCodeFirstCore.Data.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

@@ -20,7 +20,7 @@ namespace EmployeeManagementBE.Data
         [MaxLength(50)]
         public string ModifiedBy { get; set; } = string.Empty;
         public DateTime? ModifiedOn { get; set; }
-        public int Status { get; set; }
+        public int Status { get; set; } = 1;
         public virtual ICollection<Student>? Students { get; set; }
     }
 }

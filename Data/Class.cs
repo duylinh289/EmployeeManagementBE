@@ -14,13 +14,13 @@ namespace EmployeeManagementBE.Data
         [Required]
         public string ClassName { get; set; } = string.Empty;
         [MaxLength(300)]
-        public string Description { get; set; } = string.Empty;
+        public string? Description { get; set; } = string.Empty;
         public int Grade { get; set; }
         [MaxLength(50)]
         public string CreateBy { get; set; } = string.Empty;
         public DateTime CreatedOn { get; set; }
         [MaxLength(50)]
-        public string ModifiedBy { get; set; } = string.Empty;
+        public string? ModifiedBy { get; set; } = string.Empty;
         public DateTime? ModifiedOn { get; set; }
         public int Status { get; set; }
         public virtual ICollection<Student> Students { get; set; }

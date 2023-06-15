@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Core.Types;
 using RepositoryCodeFirstCore.Data;
 using RepositoryCodeFirstCore.IRepository;
 
@@ -31,6 +32,36 @@ namespace RepositoryCodeFirstCore.Controllers
             try
             {
                 var res = await _studentsRepository.GetAll();
+                return res != null ? Ok(res) : NotFound();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex);
+            }
+        }
+        [HttpGet]
+        [Route("Search")]
+        public async Task<IActionResult> Search(string req)
+        {
+            try
+            {
+                var res = await _studentsRepository.Search(req);
+                return res != null ? Ok(res) : NotFound();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex);
+            }
+        }
+        [HttpPost]
+        [Route("SearchByCondition")]
+        public async Task<IActionResult> SearchByCondition(SearchStudentDTO req)
+        {
+            try
+            {
+                var res = await _studentsRepository.SearchByCondition(req);
                 return res != null ? Ok(res) : NotFound();
             }
             catch (Exception ex)
@@ -74,7 +105,7 @@ namespace RepositoryCodeFirstCore.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Route("Update")]
         public async Task<IActionResult> UpdateStudent(UpdateStudentDTO req)
@@ -99,7 +130,7 @@ namespace RepositoryCodeFirstCore.Controllers
                 return BadRequest(ex);
             }
         }
-        [HttpPost]
+        [HttpPut]
         [Authorize]
         [Route("Delete")]
         public async Task<IActionResult> DeleteStudent(Guid id)
@@ -122,6 +153,102 @@ namespace RepositoryCodeFirstCore.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetScoreCard")]
+        public async Task<IActionResult> GetScoreCard(Guid studentcode)
+        {
+            try
+            {
+                var res = await _studentsRepository.GetScoreCard(studentcode);
+                return res != null ? Ok(res) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("GetSubject")]
+        public async Task<IActionResult> GetSubject(Guid studentcode)
+        {
+            try
+            {
+                var res = await _studentsRepository.GetSubjectForRegis(studentcode);
+                return res != null ? Ok(res) : NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("AddSubject")]
+        public async Task<IActionResult> AddSubject(int subjectid, Guid studentid)
+        {
+            try
+            {
+                var res = await _studentsRepository.RegisSubject(studentid, subjectid);
+                return Ok(new
+                {
+                    code = "success",
+                    message = "Regis subject successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = "error",
+                    message = ex.Message
+                });
+            }
+        }
+        [HttpPost]
+        [Route("RemoveSubject")]
+        public async Task<IActionResult> RemoveSubject(int subjectid, Guid studentid)
+        {
+            try
+            {
+                var res = await _studentsRepository.RemoveSubject(studentid, subjectid);
+                return Ok(new
+                {
+                    code = "success",
+                    message = "Remove subject successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = "error",
+                    message = ex.Message
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("EditScore")]
+        public async Task<IActionResult> EditScore(ScoreCardDTO req)
+        {
+            try
+            {
+                var res = await _studentsRepository.EditScoreCard(req);
+                return Ok(new
+                {
+                    code = "success",
+                    message = "Edit Score successfully"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    code = "error",
+                    message = ex.Message
+                });
             }
         }
     }
